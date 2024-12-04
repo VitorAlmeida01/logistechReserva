@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles/calculadora.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora financeira</title>
+</head>
+<body>
+    <header class="headerElements">
+
+        <section class="logoImg"><a href="#home"></a></section>
+
+        <ul>
+            <li><a class="menus" href="#home">Home</a></li>
+            <li><a class="menus" href="#aboutUs">Sobre nós</a></li>
+            <li><a class="menus" href="#simuladorFinanceiro">Simulador</a></li>
+            <li><a class="menus" href="#solution">Serviços</a></li>
+            <li><a class="menuLogin" href="./login.html">Login</a></li>
+        </ul>
+    </header>
+    <div class="simulador">
+      <div class="titulo">
+        <span>SIMULE AQUI!</span>
+        </div>
+        <div class="subtitulo">
+          <span>aqui simularemos o seu processo!</span> <br>
+        </div>
+        <div class="campos">
+            <input type="text" id="ipt_unidades" placeholder="produção esperada (em unidades)"> <br>              
+            <input type="text" id="ipt_valor" placeholder="valor de venda (por unidade)"> <br>
+            <input type="text" id="ipt_renda" placeholder="renda mensal (R$)"> <br>
+        </div>
+        <div class="botao">
+            <button onclick="analisar()">analisar armazenamento</button> <br>
+        </div>
+        <div id="div_mensagem"></div>
+    </div>
+</body>
+</html>
+<script>
+
+function analisar(){
+    var unidades = Number(ipt_unidades.value);
+    var valor = Number(ipt_valor.value);
+    var rendaMensal = Number(ipt_renda.value);
+    var rendaCalculada = (unidades * valor)
+    if (rendaCalculada > rendaMensal){
+        div_mensagem.innerHTML = `sua renda mensal está <br> <b style=color:red> R$${(rendaCalculada - rendaMensal).toFixed(2)} </b> <br> abaixo do que deveria, o que pode indicar possivel extravio de produtos de seu armazem <br> <br> para averiguar esse possivel problema contrate nossos serviços.`
+    } else if (rendaCalculada < rendaMensal){
+        div_mensagem.innerHTML = `sua renda mensal está <br> <b style=color:red> R$${rendaMensal - rendaCalculada.toFixed(2)} </b> <br> acima do que deveria, <p style=color:green> o que pode ser uma boa noticia </p> <p style=color:red> ou algum erro grave no calculo da renda mensal </p> para averiguar esse possivel problema contrate nossos serviços`
+    } else if (rendaCalculada == rendaMensal){
+        div_mensagem.innerHTML = `sua renda mensal está igual a que calculamos em nossa estimativa <br> <b style=color:green> o que indica que não na nenhum problema atualmente na detecção de entrada e saida de seus produtos </b> e para garantir que vai continuar assim contrate nossos serviços`
+    }
+}
+</script>

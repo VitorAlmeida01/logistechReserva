@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../styles/dashboard.css" />
+    <link rel="stylesheet" href="../styles/barraLateral.css" />
+    <script src="../script/sessao.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body onload="buscarRegistrosGraficoBarra(); buscarRegistrosGraficoPizza(); carregarNomeEmpresa(); buscarRegistrosGraficoEsteiras()">
+    <div class="container-dash">
+       <div id="barralateral" class="barra-lateral">
+        
+      </div>
+
+      <div class="dashboard">
+        <div class="kpis">
+          <div class="produtos-registrados">
+            <p><b>Total de produtos</b></p>
+            <p id="span_qtd_produtos"></p>
+          </div>
+          <div class="esteira-mais-desvio">
+            <p><b>Esteira com mais produtos Inválidos</b></p>
+            <p id="esteira_com_mais_desvio">Esteira 3</p>
+          </div>
+        </div>
+        <div class="blocos">
+          <div class="bloco1">
+            <div style="width: 100%; height: 100%" class="porcentagem">
+              <canvas id="grafico-pizza"></canvas>
+            </div>
+          </div>
+
+          <div class="bloco2">
+            <div class="grafico-barras">
+              <canvas id="grafico-barra"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="bloco3">
+          <div style="width: 100%; height: 100%" class="grafico-linha">
+            <canvas id="grafico_esteiras"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<!-- Import do ChartJS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Import do pluguin de data label do ChartJS -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script>
+  // Carregando nome da empresa
+ 
+
+  var ctx = document.getElementById("grafico-barra").getContext("2d");
+  var qtdValidosTotal = 0;
+  var qtdInvalidosTotal = 0;
+  var qtdProdutosTotal = qtdInvalidosTotal + qtdInvalidosTotal;
+  
+  var qtd_validos_7_dias = [];
+  var qtd_invalidos_7_dias = [];
+  var datas_ultimos_7_dias = [];
+  var grafico_pizza;
+  var graficoBarra;
+  var graficoEsteiras;
+  var lista_de_esteiras = [];
+  var qtd_invalidos_esteiras = [];
+  var qtd_validos_esteiras = [];
+  var esteiraComMaisInvalidos = "";
+
+function atualizarGraficoPizza(registros) {
+    qtdValidosTotal = Number(registros[0].ProdutosValidos);
+    qtdInvalidosTotal = Number(registros[0].ProdutosInvalidos);
+    qtdProdutosTotal = qtdInvalidosTotal + qtdValidosTotal;
+    span_qtd_produtos.innerHTML = qtdProdutosTotal;
+
+    if (grafico_pizza) {
+        grafico_pizza.data.datasets[0].data = [qtdValidosTotal, qtdInvalidosTotal];
+        grafico_pizza.update();
+    } else {
+        grafico_pizza = new Chart(document.getElementById("grafico-pizza"), {
+            type: "pie",
+            data: {
+                labels: ["Válidos", "Não válidos"],
+                datasets: [
+                    {
+                        label: "Valor",
+                        data: [qtdValidosTotal, qtdInvalidosTotal],
+                        backgroundColor: ["#384cd1", "#FF0000"],
+                        borderWidth: 0,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                // cutout: '30%',
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: "Produtos válidos VS inválidos",
+                        font: {
+                            size: 20,
+                        },
+                        color: "#000",
+                        padding: {
+                            top: 5,
+                            bottom: 5,
+                        },
+                    },
+                    datalabels: {
+                        color: "#fff",
+                        font: {
+                            weight: "bold",
+                            size: 20,
+                        },
+                        formatter: (value, ctx) => {
+                            var porcentagens = (((Number(value / qtdProdutosTotal)) * 100)).toFixed(1);
+                            return `${porcentagens}%`;
+                        },
+                        anchor: "center",
+                        align: "center",
+                    },
+                },
+            },
+            plugins: [ChartDataLabels], // Ativando o plugin ChartDataLabels
+        });
+    }
+}
+
+function atualizarGraficoBarra(registros) {
+
+  datas_ultimos_7_dias = []
+  qtd_invalidos_7_dias = []
+  qtd_validos_7_dias = []
+    for (var contador = 0; contador < registros.length; contador++) {
+      var dataAtual = registros[contador].data;
+      var objeto_data = new Date(dataAtual)
+      var diaAtual = objeto_data.getUTCDate().toString().padStart(2, '0'); 
+      var mesAtual = (objeto_data.getUTCMonth() + 1).toString().padStart(2, '0');
+      var dataFormatada = `${diaAtual}/${mesAtual}`
+
+      var produtoValidoAtual = Number(registros[contador].ProdutosValidos);
+      var produtoInvalidoAtual = Number(registros[contador].ProdutosInvalidos);
+      
+      datas_ultimos_7_dias.push(dataFormatada);
+      qtd_validos_7_dias.push(produtoValidoAtual);
+      qtd_invalidos_7_dias.push(produtoInvalidoAtual);
+    }
+    console.log(qtd_invalidos_7_dias)
+    console.log(qtd_validos_7_dias)
+    console.log(datas_ultimos_7_dias)
+
+    if (graficoBarra) {
+        graficoBarra.data.datasets[0].data = qtd_validos_7_dias;
+        graficoBarra.data.datasets[1].data = qtd_invalidos_7_dias;
+        graficoBarra.update();
+    } else {
+      graficoBarra = new Chart(document.getElementById("grafico-barra"), {
+        type: "bar",
+        data: {
+          labels: datas_ultimos_7_dias,
+          datasets: [
+            {
+              label: "Produtos válidos",
+              backgroundColor: gradient,
+              data: qtd_validos_7_dias,
+              borderWidth: 0,
+            },
+            {
+              label: "Produtos inválidos",
+              backgroundColor: gradient1,
+              data: qtd_invalidos_7_dias,
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            title: {
+              display: true,
+              text: "Produtos válidos e inválidos dos últimos 7 dias",
+              font: {
+                size: 16,
+              },
+              color: "#000",
+              padding: {
+                top: 5,
+                bottom: 5,
+              },
+            },
+          },
+
+         scales: {
+            y: {
+              title: {
+                display: true,
+                text: "Quantidade de produtos",
+                font: {
+                  size: 16,
+                  weight: 700,
+                },
+              },
+              beginAtZero: true,
+            },
+            x: {
+              title: {
+                display: true,
+                text: "Período",
+                font: {
+                  size: 16,
+                  weight: 700,
+                },
+              },
+            },
+          },
+        },
+      });
+        }
+    }
+    function atualizarGraficoEsteiras(registros) {
+
+    lista_de_esteiras = [];
+    qtd_invalidos_esteiras = [];
+    qtd_validos_esteiras = [];
+    esteiraComMaisInvalidos = registros[0].Esteira;
+    maior_qtd_produtos_invalidos = Number(registros[0].ProdutosInvalidos);
+    for (var contador = 0; contador < registros.length; contador++) {
+      var esteiraAtual = registros[contador].Esteira;
+      var produtoValidoAtual = Number(registros[contador].ProdutosValidos);
+      var produtoInvalidoAtual = Number(registros[contador].ProdutosInvalidos);
+    if (maior_qtd_produtos_invalidos < produtoInvalidoAtual) {
+      maior_qtd_produtos_invalidos = produtoInvalidoAtual;
+      esteiraComMaisInvalidos = esteiraAtual;
+    }
+    
+    lista_de_esteiras.push(esteiraAtual);
+    qtd_validos_esteiras.push(produtoValidoAtual);
+    qtd_invalidos_esteiras.push(produtoInvalidoAtual);
+  }
+  esteira_com_mais_desvio.innerHTML = esteiraComMaisInvalidos
+  console.log(lista_de_esteiras)
+  console.log(qtd_validos_esteiras)
+  console.log(qtd_invalidos_esteiras)
+
+  if (graficoEsteiras) {
+      graficoEsteiras.data.datasets[0].data = qtd_validos_esteiras;
+      graficoEsteiras.data.datasets[1].data = qtd_invalidos_esteiras;
+      graficoEsteiras.update();
+  } else {
+    graficoEsteiras = new Chart(document.getElementById("grafico_esteiras"), {
+      type: "bar",
+      data: {
+        labels: lista_de_esteiras,
+        datasets: [
+          {
+            label: "Produtos válidos",
+            backgroundColor: gradient,
+            data: qtd_validos_esteiras,
+            borderWidth: 0,
+          },
+          {
+            label: "Produtos inválidos",
+            backgroundColor: gradient1,
+            data: qtd_invalidos_esteiras,
+            borderWidth: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Produtos válidos e inválidos de cada esteira",
+            font: {
+              size: 16,
+            },
+            color: "#000",
+            padding: {
+              top: 5,
+              bottom: 5,
+            },
+          },
+        },
+
+       scales: {
+          y: {
+            title: {
+              display: true,
+              text: "Quantidade de produtos",
+              font: {
+                size: 16,
+                weight: 700,
+              },
+            },
+            beginAtZero: true,
+          },
+          x: {
+            title: {
+              display: true,
+              text: "Esteiras",
+              font: {
+                size: 16,
+                weight: 700,
+              },
+            },
+          },
+        },
+      },
+    });
+      }
+  }
+
+function buscarRegistrosGraficoPizza() { 
+    fetch(`/registros/listarValidosInvalidosTotalEmpresa/${sessionStorage.idEmpresa}`, { 
+      method: 'GET', 
+    }) 
+        .then((response) => { 
+          if (response.ok) { 
+            return response.json(); 
+          } else { 
+            throw new Error('Erro ao buscar as registros.'); 
+          } }) 
+          .then((registros) => { 
+            console.log("registros recebidas:", registros); 
+            atualizarGraficoPizza(registros); 
+          }) .catch((erro) => { 
+            console.error('Erro ao listar registros:', erro);
+          });
+        }
+
+function buscarRegistrosGraficoBarra() { 
+    fetch(`/registros/listarValidosInvalidosPorSemanaEmpresa/${sessionStorage.idEmpresa}`, { 
+      method: 'GET', 
+    }) 
+        .then((response) => { 
+          if (response.ok) { 
+            return response.json(); 
+          } else { 
+            throw new Error('Erro ao buscar as registros.'); 
+          } }) 
+          .then((registros) => { 
+            console.log("registros recebidas:", registros);
+            atualizarGraficoBarra(registros); 
+          }) .catch((erro) => { 
+            console.error('Erro ao listar registros:', erro); 
+          });
+        }
+
+    function buscarRegistrosGraficoEsteiras() { 
+    fetch(`/registros/listarValidosInvalidosTodasEsteirasEmpresa/${sessionStorage.idEmpresa}`, { 
+      method: 'GET', 
+    }) 
+        .then((response) => { 
+          if (response.ok) { 
+            return response.json(); 
+          } else { 
+            throw new Error('Erro ao buscar as registros.'); 
+          } }) 
+          .then((registros) => { 
+            console.log("registros recebidas:", registros);
+            atualizarGraficoEsteiras(registros); 
+          }) .catch((erro) => { 
+            console.error('Erro ao listar registros:', erro); 
+          });
+        }
+
+  var buscarRegistrosGraficoPizzaConstantemente = setInterval(buscarRegistrosGraficoPizza, 1000);
+  
+  var buscarRegistrosGraficoBarraDiariamente = setInterval(buscarRegistrosGraficoBarra, 1000 );
+
+  var buscarRegistrosGraficoEsteirasConstantemente = setInterval(buscarRegistrosGraficoEsteiras, 1000 );
+  // Criar gradiente
+  var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient.addColorStop(0, "#384cd1");
+  gradient.addColorStop(1, "#3999f4");
+
+  var gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+  gradient1.addColorStop(0, "#f90000");
+  gradient1.addColorStop(1, "#c36767");
+
+
+  function carregarNomeEmpresa() {
+    var idEmpresa = sessionStorage.getItem("idEmpresa");
+    fetch(`/empresas/listar/${idEmpresa}`, {
+      method: "GET",
+    })
+      .then((resposta) => {
+        resposta
+          .json()
+          .then((resultado) => {
+            nomeEmpresa.innerHTML = resultado[0].nomeFantasia;
+          })
+          .catch((erro) => {
+            console.log(erro);
+          });
+      })
+      .catch((erro) => {
+        console.log(erro);
+      });
+  }
+    function gerarTotalProdutos(quantidadeProdutos) {
+        var totalProdutos = 0
+        for (let index = 0; index < quantidadeProdutos.length; index++) {
+            const element = quantidadeProdutos[index]
+            totalProdutos += element
+        }
+        return totalProdutos
+    }
+</script>

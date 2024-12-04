@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistech</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="./styles/head_footer.css">
+    <link rel="stylesheet" href="./styles/calculadora.css">
+    <link rel="stylesheet" href="./styles/cadastro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+    <script src="./script/calculadora.js" defer></script>
+    <script src="../projeto_LogistechBeta/script/cadastro.js" defer></script>
+</head>
+
+<body>
+    <div class="areaResultado" id="modal_resultado_simulador">
+        <div class="modalResultado" id="modal_resultado">
+            <div class="infoResultado">
+                <img src="./img/Logo_Logistech2.png" alt="logo Logistech" class="logoResultado">
+                <span class="mensagemResultado" id="mensagem_simulador"></span>
+            </div>
+            <button type="button" class="botaoOK" onclick="fecharResultado()">ENTENDIDO</button>
+        </div>
+    </div>
+    <!-- Vitor -->
+    <header class="headerElements">
+        <section class="logoImg"><a href="#home"></a></section>
+
+        <ul>
+            <li><a class="menus" href="index.html#home">Home</a></li>
+            <li><a class="menus" href="index.html#aboutUs">Sobre nós</a></li>
+            <li><a class="menus" href="index.html#simuladorFinanceiro">Simulador</a></li>
+            <li><a class="menus" href="index.html#solution">Serviços</a></li>
+            <li><a class="menuLogin" href="./login.html">Login</a></li>
+        </ul>
+    </header>
+    <!-- Seção de Cadastro -->
+    <main class="hidden-item">
+        <div id="home" class="bannerImg">
+            <div class="mainText">
+
+                <h1>
+                    ORGANIZAÇÃO, HOJE, <br>
+                    PARA A SUA EMPRESA
+                </h1>
+                <p>
+                    Conheça nossas soluções em <br>
+                    monitoramento de processos de fabricação<br>
+                    e destaque-se no mercado
+                </p>
+                <button id="cadastro" onclick="window.location.href = './login.html';">DESEJO ENTRAR</button>
+
+            </div>
+    </main>
+
+    <div id="aboutUs" class="secondSection hidden-item">
+        <div class="sectionLeft">
+            <div class="circle"></div>
+        </div>
+
+        <div class="sectionRight">
+            <div class="textSection">
+                <h2>Conheça um pouco mais sobre a
+                    Logistech</h2>
+                <hr>
+                <p>
+                    Na Logistech, oferecemos soluções inovadoras em monitoramento de processos de fabricação, que visam
+                    otimizar a eficiência e garantir a qualidade em cada etapa da produção.
+                    <br><br>
+                    Nossa missão é ajudar sua empresa a se destacar no mercado, utilizando tecnologia de ponta e
+                    insights valiosos para impulsionar a produtividade e a competitividade do seu negócio. Junte-se a
+                    nós e transforme seu processo de fabricação!
+                </p>
+                <button id="btn_SaibaMais" onclick="window.location.href = './sobrenós.html'">Saiba mais</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-calculadora hidden-item" id="simuladorFinanceiro">
+        <div class="simulador">
+            <div class="titulo">
+                <h1>SIMULE AQUI!</h1>
+            </div>
+            <hr>
+            <div class="subtitulo">
+                <h2>Aqui simularemos o seu processo!</h2>
+            </div>
+            <div class="campos">
+                <label for="ipt_unidades">Produção esperada (em unidades)</label>
+                <input type="text" id="ipt_unidades" placeholder="Insira um valor">
+                <label for="ipt_valor">Valor de venda (por unidade)</label>
+                <input type="text" id="ipt_valor" placeholder="Insira um valor">
+                <label for="ipt_renda">Faturamento mensal (R$)</label>
+                <input type="text" id="ipt_renda" placeholder="Insira um valor">
+
+                <div class="botao">
+                    <button onclick="analisar()">Analisar armazenamento</button><br>
+                </div>
+                <div id="div_mensagem"></div>
+            </div>
+
+
+        </div>
+    </div> 
+    <!-- Gabriel -->
+    <div id="solution" class="container-solucao hidden-item">
+        <div class="texto-solucao">
+            <h1>Conheça nossa solução</h1><br>
+            <p>Nossa solução baseia-se no monitoramento das esteiras de produção e posteriormenteo envio<br>
+                desses dados para gráficos que te ajudam a tomar a melhor decisão baseada em dados</p>
+        </div><br><br>
+        <div class="solucao-imagens">
+            <div class="solucao-coluna1">
+                <img src="./img/man-working-on-laptop.jpg" alt="" class="solucao-imagem1">
+                <span>Equipe pronta para solucionar problemas</span>
+            </div>
+            <div class="solucao-coluna2">
+                <img src="./img/esteira.png" alt="" class="solucao-imagem2">
+                <span>Solução IoT para suas esteiras</span>
+            </div>
+            <div class="solucao-coluna3">
+                <img src="./img/analise-dashboard.png" alt="" class="solucao-imagem3">
+                <span>Melhore a gestão de seu negócio com nossa Dashboard</span>
+            </div>
+        </div><br><br>
+        <button class="btn_SaibaMais" onclick="window.location.href = './servicos.html'">Saiba Mais</button>
+    </div>
+
+    <img src="./img/wave.svg" alt="" class="imagem-footer">
+    <footer>
+        <div class="componentes-footer">
+            <div class="contato-footer">
+                <span class="contato-footer-assunto">Contato:</span><br>
+                <span>Email: logistech@email.com</span>
+                <span>Telefone: (XX)XXXXX-XXXX</span>
+            </div>
+            <div class="endereco-footer">
+                <span class="contato-footer-assunto">Endereço:</span><br>
+                <span>Rua Haddock Lobo, 595 São Paulo - SP</span>
+            </div>
+        </div>
+        <p>Copyright © 2024 - Todos os direitos reservados Logistech</p>
+    </footer>
+
+</body>
+
+</html>
+<script>
+    function Abrir_SaibaMais() {
+        window.location.href = './sobrenós.html'
+    }
+
+    // Aqui eu crio um vetor e seleciono todos os elementos que possuem a classe .hidden-item no HTML
+    const hiddenItems = document.querySelectorAll('.hidden-item')
+    //Descomente a linha abaixo e abra o console para ver
+    // console.log(hiddenItems)
+
+    // Aqui eu chamo a função de "observar"
+    const observerCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            // Aqui eu verifico se o objeto observado apareceu na tela
+            if (entry.isIntersecting) {
+                // caso sim, eu mudo a classe dele para "show"
+                entry.target.classList.add('show')
+                observer.unobserve(entry.target) // Para de observar o item após ele ficar visível
+            }
+        })
+    }
+
+    // Configuração do observer
+    const observerOptions = {
+        rootMargin: '0px',
+        threshold: 0.1 // Ativa quando 10% do item estiver visível
+    }
+
+    // Cria uma nova instância do IntersectionObserver
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+
+    // Aplica o observer para cada item da lista
+    hiddenItems.forEach(item => {
+        observer.observe(item)
+    });
+</script>

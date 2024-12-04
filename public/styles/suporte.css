@@ -1,0 +1,64 @@
+.container {
+    display: flex;
+}
+
+.suporte {
+    padding: 1rem;
+    height: 100vh;
+}
+
+.suporte > p {
+    font-size: 2rem;
+    text-align: center;
+}
+
+.containerEmpresas {
+    width: 85vw;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: left;
+    flex-wrap: wrap;
+    border: 2px solid black;
+    border-radius: 10px;
+    overflow-y: auto;
+    scrollbar-color: #1E2868 transparent;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+#tabelaEmpresas {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tabelaEmpresas thead {
+    border-radius: 2px;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}
+ th {
+    background-color: #f4f4f4;
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+tr td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.tableIcons{
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+.tableIcons i:hover{
+    transition: 0.2s;
+    color: #0f26b9;
+  }

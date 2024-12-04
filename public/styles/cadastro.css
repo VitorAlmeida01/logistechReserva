@@ -1,0 +1,271 @@
+.areaMensagens {
+    position: fixed;
+    display: none;
+    z-index: 3;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0000008a;
+    align-items: center;
+    justify-content: center;
+}
+.modalErro{
+    position: fixed;
+    display: none;
+    flex-direction: column;
+    width: 18vw;
+    height: 48vh;
+    z-index: 5;
+    justify-content: flex-end;
+    border-radius: 0.5vw;
+    background-color: #d9d9d9;
+    align-items: center;
+    padding: 4vh 2vw;
+}
+.infoErro{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+    margin-bottom: 3vh;
+}
+.iconErro{
+    font-size: 8vw;
+    color: #ed1616;
+}
+.mensagemErro{
+    text-align: center;
+    color: #ed1616;
+    font-weight: 900;
+    font-size: 1vw;
+}
+.botaoOK{
+    background-color: #0911a8;
+    color: #fff;
+    font-size: 0.7vw;
+    font-weight: 800;
+    padding: 2vh 1vw;
+    margin-top: 3vh;
+    border: none;
+    border-radius: 0.5vw;
+    cursor: pointer;
+}
+.modalCadastrado{
+    position: fixed;
+    display: none;
+    flex-direction: column;
+    width:28vw;
+    height: 60vh;
+    z-index: 5;
+    justify-content: flex-end;
+    border-radius: 0.5vw;
+    background-color: #170d40;
+    align-items: center;
+    padding: 4vh 2vw;
+}
+.infoCadastrado{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3vh;
+    gap: 2vh;
+} 
+.logoCadastrado{
+    height: 26vh;
+}
+.mensagemCadastrado{
+    color: #D9D9D9;
+    font-weight: 900;
+    text-align: center;
+    font-size: 1vw;
+}
+.botaoConcluido{
+    background-color: #0b713b;
+    color: #fff;
+    font-size: 1vw;
+    font-weight: 800;
+    padding: 1.5vh 1.5vw;
+    margin-top: 1vh;
+    border: none;
+    border-radius: 0.5vw;
+    cursor: pointer;
+}
+.area_form {
+    position: fixed;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../img/bannerImg.png);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.bloco_form{
+    display: flex;
+    width: 50vw;
+    height: fit-content;
+    justify-content: flex-end;
+    border-radius: 0.5vw;
+    background-color: #070E3C;
+}
+#iconCasa{
+    position: absolute;
+    z-index: 3;
+    margin-top: 0.5vh;
+    margin-right: 0.5vh;
+    font-size: 1.5vw;
+    cursor: pointer;
+}
+.casaLogin{
+    color: #D9D9D9;
+}
+.bloco_info_cadastro{
+    display: flex;
+    flex-direction: column;
+    width: 24vw;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../img/fundoCadastro.png);
+    background-size: cover;
+    border-top-left-radius: 0.5vw;
+    border-bottom-left-radius: 0.5vw;
+}
+.textoCadastro{
+    font-size: 1vw;
+    color: #D9D9D9;
+    margin-top: 1vh;
+    text-align: center;
+    width: 15vw;
+}
+.bloco_info_cadastro .imgLogo{
+    height: 20vh;
+}
+.form_cadastro{
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    flex-direction: column;
+    background-color: #d9d9d9;
+    padding: 6vh 0vw 2vh;
+    border-top-right-radius: 0.5vw;
+    border-bottom-right-radius: 0.5vw;
+    width: fit-content;
+}
+.form_cadastro h1{
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-bottom: 8vh;
+    font-size: 1.8vw;
+    text-align: center;
+}
+
+.div_inputs{
+    display: flex;
+    flex-direction: column;
+    padding: 0vh 3vw;
+}
+#cadastroParte1{
+    display: flex;
+    flex-direction: column;
+}
+#cadastroParte2{
+    display: none;
+    flex-direction: column;
+}
+#cadastroParte3{
+    display: none;
+    flex-direction: column;
+}
+.inputs {
+    background-color: transparent;
+    border-style: solid;
+    width:20vw;
+    font-size: 0.9vw;
+    margin-bottom: 4.5vh;
+    border-width: 0 0 0.2vh 0;
+    z-index: 2;
+}
+.input_cidade {
+    background-color: transparent;
+    border-style: solid;
+    width:16vw;
+    font-size: 0.9vw;
+    margin-bottom: 4vh;
+    border-width: 0 0 0.2vh 0;
+    z-index: 2;
+}
+.cidade_e_uf{
+    display: flex;
+    gap: 1vw;
+}
+.ipt_e_label_cidade{
+    display: flex;
+    flex-direction: column;
+}
+.selectUF{
+    height: 2vh;
+    width: 6vh;
+    font-size: 0.9vw;
+    border-width: 0 0 0.2vh 0;
+    background-color: #D9D9D9;
+    overflow: auto;
+}
+.labels, .label_cidade {
+    position: relative;
+    transition: .5s;
+    user-select: none;
+    z-index: 1;
+    font-size: 0.9vw;
+    bottom: 9vh;
+}
+.label_estado{
+    position: relative;
+    transition: .5s;
+    user-select: none;
+    z-index: 1;
+    font-size: 0.9vw;
+    bottom: 6vh;
+}
+.span_validacao{
+    height: 1vh;
+    position: relative;
+    bottom: 5.4vh;
+    color: #069206;
+    font-weight: bold;
+    font-size: 0.8vw;
+}
+.area_botao {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75vw;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2vh;
+}
+.botao_cadastro {
+    background-color: #070E3C;
+    color: #fff;
+    font-size: 0.9vw;
+    font-weight: 800;
+    padding: 1vh 0.8vw;
+    border: none;
+    border-radius: 0.5vw;
+    cursor: pointer;
+}
+.botao_voltar  {
+    background-color: #dad9d9;
+    color: #070E3C;
+    font-size: 0.9vw;
+    font-weight: 800;
+    padding: 1vh 1.25vw;
+    border: none; 
+    border-radius: 0.5vw;
+    cursor: pointer;
+}
+.avisoLogin{
+
+    font-size: 0.8vw;
+}

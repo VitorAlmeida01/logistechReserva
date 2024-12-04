@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico</title>
+  <link rel="stylesheet" href="../styles/barraLateral.css">
+  <link rel="stylesheet" href="../styles/historico.css">
+  <script src="../script/sessao.js"></script>
+  <!-- Import de fontes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+</head>
+
+<body onload="listarRegistros(), listarEsteiras()">
+  <div class="container-dash">
+    <div id="barralateral" class="barra-lateral">
+      
+    </div>
+    <div class="historico">
+      <h1>Histórico</h1>
+      <p>Aqui são listados todos os registros capturados pelos Esteiras</p>
+      <div class="filtros">
+        <div id="container-sltEsteiras">
+          <p><b>Esteira</b></p>
+          <select id="slt_esteiras" class="slt_esteiras">
+          </select>
+        </div>
+        <div id="container-dtInicio">
+          <label for="container-dtInicio">Data de Início</label>
+          <input type="date" id="data1">
+        </div>
+        <div id="container-dtFinal">
+          <label for="container-dtFinal">Data final</label>
+          <input type="date" id="data2">
+        </div>
+        <button id="botao-filtro" onclick="aplicarFiltro()">Aplicar Filtros</button>
+        <button id="botao-filtro" onclick="window.location.reload()">Limpar filtros</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Esteira</th>
+              <th>Altura detectada</th>
+              <th>Data e Horário</th>
+            </tr>
+          </thead>
+          <tbody id="tabela_registros">
+
+
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+  function aplicarFiltro() {
+    // validação de data
+    var data_inicial = data1.value
+    var data_final = data2.value
+    if (data_inicial > data_final) {
+      alert("A data inicial não pode ser maior que a final!")
+      return
+    }
+
+    fetch(`/registros/listarPorData/${sessionStorage.idEmpresa}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dataInicial: data_inicial,
+        dataFinal: data_final
+      })
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw new Error('Erro ao buscar as esteiras.')
+        }
+      })
+      .then((esteiras) => {
+        console.log("Esteiras recebidas:", esteiras)
+        var conteudo_tabela = ""
+        for (var contador = 0; contador < esteiras.length; contador++) {
+          var nomeEsteira = esteiras[contador].Esteira
+          var AlturaDetectada = esteiras[contador].AlturaDetectada
+          var DataRegistro = esteiras[contador].DataRegistro
+          var data = new Date(DataRegistro)
+          var dataFormatada = data.toLocaleString('pt-BR')
+          conteudo_tabela += `
+                  <tr>
+                    <td>${nomeEsteira}</td>
+                    <td>${AlturaDetectada} cm</td>
+                    <td>${dataFormatada}</td>
+                  </tr>`
+        }
+        tabela_registros.innerHTML = conteudo_tabela
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar esteiras:', erro)
+        alert('Erro ao listar esteiras.')
+      })
+  }
+
+
+  function listarEsteiras() {
+        var fkEmpresa = sessionStorage.idEmpresa
+        fetch(`/esteiras/listar/${fkEmpresa}`, {
+            method: "GET"
+        })
+            .then((resposta) => {
+                if (resposta.ok) {
+                    resposta.json()
+                        .then((dados) => {
+                            if (dados.length == 0) {
+                                div_containerEsteiras.innerHTML = "<p>Nenhuma esteira cadastrada</p>"
+                            }
+                            // populando <select> com as esteiras
+                            slt_esteiras.innerHTML = `<option selected disabled value="#">Selecione uma esteira</option>`
+                            for (var i = 0; i < dados.length; i++) {
+                                slt_esteiras.innerHTML += `<option value=${dados[i].idEsteira}>${dados[i].nome}</option>`
+                            }
+                        })
+                        .catch((erro) => {
+                            console.log("Erro ao converter JSON: ", erro)
+                        })
+                }
+            })
+            .catch((erro => {
+                console.log("Erro ao enviar requisição: ", erro)
+            }))
+    }
+    slt_esteiras.addEventListener("change", () => {
+        // div_containerEsteiras.innerHTML = ""
+        // console.log(slt_esteiras.value)
+        sessionStorage.setItem('ESTEIRA_ATUAL', slt_esteiras.value)
+        if (slt_esteiras.value == "#") {
+            return
+        }
+          setTimeout(filtrarEsteira, 1000)
+        
+
+      
+    })
+
+
+function filtrarEsteira(){
+  var idEsteira = sessionStorage.ESTEIRA_ATUAL
+
+  fetch(`/esteiras/filtrarEsteira/${idEsteira}`, {
+    method: 'GET',
+  }).then((response) => {
+    if(response.ok){
+      return response.json()
+    }else{
+      throw new Error('Erro ao filtrar esteiras')
+    }
+  }).then((esteiras) => {
+    console.log("Esteiras recebidas:", esteiras)
+        var conteudo_tabela = ""
+        for (var contador = 0; contador < esteiras.length; contador++) {
+          var nomeEsteira = esteiras[contador].nomEsteira
+          var AlturaDetectada = esteiras[contador].AlturaDetectada
+          var DataRegistro = esteiras[contador].DataRegistro
+          var data = new Date(DataRegistro)
+          var dataFormatada = data.toLocaleString('pt-BR')
+          conteudo_tabela += `
+                  <tr>
+                    <td>${nomeEsteira}</td>
+                    <td>${AlturaDetectada} cm</td>
+                    <td>${dataFormatada}</td>
+                  </tr>`
+        }
+        tabela_registros.innerHTML = conteudo_tabela
+  })
+}
+
+
+  function listarRegistros() {
+    fetch(`/registros/listar/${sessionStorage.idEmpresa}`, {
+      method: 'GET',
+
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          throw new Error('Erro ao buscar as esteiras.')
+        }
+      })
+      .then((esteiras) => {
+        console.log("Esteiras recebidas:", esteiras)
+        var conteudo_tabela = ""
+        for (var contador = 0; contador < esteiras.length; contador++) {
+          var nomeEsteira = esteiras[contador].esteiraNome
+          var AlturaDetectada = esteiras[contador].AlturaDetectada
+          var DataRegistro = esteiras[contador].DataRegistro
+          var data = new Date(DataRegistro)
+          var dataFormatada = data.toLocaleString('pt-BR')
+          conteudo_tabela += `
+                  <tr>
+                    <td>${nomeEsteira}</td>
+                    <td>${AlturaDetectada} cm</td>
+                    <td>${dataFormatada}</td>
+                  </tr>`
+        }
+        tabela_registros.innerHTML = conteudo_tabela
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar esteiras:', erro)
+        alert('Erro ao listar esteiras.')
+      })
+  }
+</script>

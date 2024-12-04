@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistech</title>
+    <link rel="stylesheet" href="../styles/barraLateral.css">
+    <link rel="stylesheet" href="../styles/cadastroEsteira.css">
+    <script src="../script/sessao.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+    <!-- <script src="../script/cadastroEsteira.js" defer></script> -->
+</head>
+
+<body>
+    <main class="container-main">
+        <div class="area_bg_modal" id="area_modal">
+            <div id="modal_1">
+                <div class="container-esteira">
+                    <div class="headerModal">
+                        <h1>Adicionar Esteira</h1>
+                        <button id="closeButton" class="close-modal"> <i class="fa-solid fa-xmark"
+                                onclick="fecharCadastro()"></i></button>
+                    </div>
+                    <div class="mainModal" id="modal-form">
+                        <label for="inpNome">Nome</label>
+                        <input type="text" id="inpNome">
+
+                        <label for="inpDep">Departamento</label>
+                        <input type="text" id="inpDep">
+
+                        <label for="inpLoc">Localização</label>
+                        <input type="text" id="inpLoc">
+
+                        <label for="inpTamanho">Tamanho do produto</label>
+                        <input type="number" id="inpTamanho">
+                        <div id="container-aviso"></div>
+                        <button id="cadastroBtn" onclick="cadastrar()">Cadastrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="area_bg_modal2" id="area_modal2">
+            <div id="modal_editar">
+                <div class="container-esteira">
+                    <div class="headerModal">
+                        <h1>Editar Esteira</h1>
+                        <button id="closeButton" class="close-modal"> <i class="fa-solid fa-xmark"
+                                onclick="fecharEdicao()"></i></button>
+                    </div>
+                    <div class="mainModal" id="modal-form">
+                        <label for="inpNomeEdt">Nome</label>
+                        <input type="text" id="inpNomeEdt">
+
+                        <label for="inpDepEdt">Departamento</label>
+                        <input type="text" id="inpDepEdt">
+
+                        <label for="inpLocEdt">Localização</label>
+                        <input type="text" id="inpLocEdt">
+
+                        <label for="inpTamanhoEdt">Tamanho do produto</label>
+                        <input type="number" id="inpTamanhoEdt">
+                        <div id="container-aviso2"></div>
+                        <button id="edicaoBtn">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="barralateral" class="barra-lateral">
+           
+        </div>
+
+        <div class="mainContent">
+            <div class="container-title">
+                <p>Esteiras</p>
+            </div>
+            <hr>
+            <div class="container-text">
+                <p>Neste seção você pode criar e visualizar todas as esteiras criadas e seus respectivos dados</p>
+            </div>
+            <div class="containerFiltro">
+                <div class="container-btnCadastro">
+                    <button id="btnCadastro" class="btn-cadastro" onclick="abrirCadastro()"><i
+                            class="fa-solid fa-circle-plus"></i>
+                        Cadastrar
+                        Esteira</button>
+                </div>
+                <div class="filtrosEsteira">
+                    <ul>
+                        <li>Pesquisar <input type="text" id="inpPesquisa"> <i class="fa-solid fa-magnifying-glass" onclick="pesquisarEsteira()"></i></li>
+                        <li class="containerBtnLimpar">
+                            <button class="btn-limparPesquisa" onclick="window.location.reload()">Limpar pesquisa</button>
+                          </li>
+                    </ul>
+                </div>
+            </div>
+            <h2>Esteiras cadastradas</h2>
+            <div class="containerEsteiras" id="containerEsteiras">
+                <table id="tabelaEsteiras">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Departamento</th>
+                            <th>Distancia esperada</th>
+                            <th>Localização</th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabela">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
+<script>
+    var idEmpresa = sessionStorage.getItem("idEmpresa")
+    function cadastrar() {
+        let divMensagem = document.getElementById('container-aviso')
+
+        if (inpNome.value == '' || inpDep.value == '' || inpLoc.value == '' || inpTamanho.value == null) {
+            // alert('Preencha todos os campos')
+            divMensagem.style.color = 'red'
+            divMensagem.innerText = 'Preencha os campos'
+            return false
+        }
+
+        setTimeout(() => {
+            divMensagem.innerHTML = ''
+        }, 1000)
+
+        fetch(`/esteiras/cadastrar`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nome: inpNome.value,
+                departamento: inpDep.value,
+                localizacao: inpLoc.value,
+                distanciaEsperada: Number(inpTamanho.value),
+                fkEmpresa: idEmpresa
+            })
+        })
+            .then((resposta) => {
+                console.log(resposta)
+                if (resposta.status == 200) {
+                    divMensagem.style.color = 'blue'
+                    divMensagem.innerText = 'Esteira cadastrada com sucesso'
+
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 1000)
+                }
+            })
+            .catch((erro) => {
+                console.error(erro)
+            })
+    }
+    function listarTodasEsteiras(fkEmpresa) {
+        fetch(`/esteiras/listar/${idEmpresa}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                if (response.ok) {
+
+                    return response.json()
+                } else {
+                    throw new Error('Erro ao buscar as esteiras.')
+                }
+            })
+            .then((esteiras) => {
+                console.log("Esteiras recebidas:", esteiras)
+                exibirEsteiras(esteiras)
+            })
+            .catch((erro) => {
+                console.error('Erro ao listar esteiras:', erro)
+                alert('Erro ao listar esteiras.')
+            })
+    }
+
+    function exibirEsteiras(esteiras) {
+        const containerEsteiras = document.getElementById('containerEsteiras')
+        // containerEsteiras.innerHTML = ''
+        let bodyTabela = document.getElementById('bodyTabela')
+
+        if (esteiras.length === 0) {
+            containerEsteiras.innerHTML = '<p>Nenhuma esteira cadastrada ainda.</p>'
+            return
+        }
+
+        for (var i = 0; i < esteiras.length; i++) {
+
+            bodyTabela.innerHTML += `
+            <tr>
+                <td>${esteiras[i].nome}</td>
+                <td>${esteiras[i].departamento}</td>
+                <td>${esteiras[i].distanciaEsperada}</td>
+                <td>${esteiras[i].localizacao}</td>
+                <td class='tableIcons'> <i class="fa-solid fa-pencil" onclick="editarEsteira(${esteiras[i].idEsteira}, '${esteiras[i].nome}', '${esteiras[i].departamento}', '${esteiras[i].localizacao}', ${esteiras[i].distanciaEsperada})"></i></td>
+                <td class='tableIcons'><i class="fa-solid fa-trash tableIcons" onclick="deletarEsteira(${esteiras[i].idEsteira})"></i></td>
+            </tr>
+    `
+
+        }
+    }
+    listarTodasEsteiras()
+
+    var btnCadastro = document.querySelector('.btn-cadastro')
+    var modal = document.getElementById('modal_1')
+    var closeButton = document.getElementById('closeButton')
+    console.log("btnCadastro:", btnCadastro)
+    console.log("modal:", modal)
+    console.log("closeButton:", closeButton)
+
+    function abrirCadastro() {
+        area_modal.style.display = 'flex'
+    }
+    function fecharCadastro() {
+        let divMensagem = document.getElementById('container-aviso')
+        area_modal.style.display = 'none'
+        divMensagem.innerHTML = ''
+
+    }
+
+    function fecharEdicao() {
+        let divMensagem2 = document.getElementById('container-aviso2')
+        area_modal2.style.display = 'none'
+        divMensagem2.innerHTML = ''
+
+    }
+
+    function deletarEsteira(idEsteira) {
+        console.log('Esteira deletada ', idEsteira)
+
+        fetch(`/esteiras/deletar/${idEsteira}`, {
+            method: "DELETE"
+        })
+            .then((resposta) => {
+                if (resposta.status == 200) {
+                    alert('Esteira deletada com sucesso')
+                    window.location.reload()
+                }
+            }).catch((erro) => {
+                console.log(erro)
+            })
+    }
+
+    function editarEsteira(idEsteira, nome, departamento, localizacao, distanciaEsperada) {
+        area_modal2.style.display = 'flex'
+
+
+        let divMensagem = document.getElementById('container-aviso')
+        inpNomeEdt.value = nome
+        inpDepEdt.value = departamento
+        inpLocEdt.value = localizacao
+        inpTamanhoEdt.value = distanciaEsperada
+
+
+
+        console.log(distanciaEsperada)
+
+        document.getElementById('edicaoBtn').addEventListener('click', function () {
+            salvarEsteira(idEsteira)
+        })
+
+    }
+
+
+    function pesquisarEsteira() {
+    var idEmpresa = sessionStorage.idEmpresa
+    bodyTabela.innerHTML = ''
+    var nomePesquisa = document.getElementById('inpPesquisa').value
+
+    fetch(`/esteiras/pesquisarEsteira/${idEmpresa}/${nomePesquisa}`)
+      .then((resposta) => {
+        if (resposta.ok) {
+          resposta.json().then((esteiras) => {
+            for (var i = 0; i < esteiras.length; i++) {
+              bodyTabela.innerHTML += `
+            <tr>
+                <td>${esteiras[i].nome}</td>
+                <td>${esteiras[i].departamento}</td>
+                <td>${esteiras[i].distanciaEsperada}</td>
+                <td>${esteiras[i].localizacao}</td>
+                <td class='tableIcons'> <i class="fa-solid fa-pencil" onclick="editarEsteira(${esteiras[i].idEsteira}, '${esteiras[i].nome}', '${esteiras[i].departamento}', '${esteiras[i].localizacao}', ${esteiras[i].distanciaEsperada})"></i></td>
+                <td class='tableIcons'><i class="fa-solid fa-trash tableIcons" onclick="deletarEsteira(${esteiras[i].idEsteira})"></i></td>
+            </tr>
+                `
+
+              if (resultado[i].idUsuario == sessionStorage.idUsuario) {
+                var deletarUserElements = document.querySelectorAll('.deletarUser')
+                deletarUserElements[i].innerHTML = ''
+              }
+            }
+          })
+        }
+      }).catch((erro => {
+        console.log("Erro ao enviar requisição: ", erro)
+      }))
+  }
+
+
+    function salvarEsteira(idEsteira) {
+        let divMensagem2 = document.getElementById('container-aviso2')
+
+        let attNome = inpNomeEdt.value
+        let attDepartamento = inpDepEdt.value
+        let attLoc = inpLocEdt.value
+        let attTamanho = Number(inpTamanhoEdt.value)
+
+
+        if (attNome == '' || attDepartamento == '' || attLoc == '' || attTamanho == null) {
+            // alert('Preencha todos os campos')
+            divMensagem2.style.color = 'red'
+            divMensagem2.innerText = 'Preencha os campos'
+            return false
+        }
+
+        setTimeout(() => {
+            divMensagem2.innerHTML = ''
+        }, 1000)
+
+
+        fetch(`/esteiras/editar/${idEsteira}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                nome: attNome,
+                departamento: attDepartamento,
+                localizacao: attLoc,
+                distanciaEsperada: attTamanho
+            }),
+        }).then((resposta) => {
+            if (resposta.status === 200) {
+                // alert('Esteira alterada com sucesso!')
+                divMensagem2.style.color = 'blue'
+                divMensagem2.innerText = 'Esteira atualizada com sucesso'
+
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
+            } else {
+                console.log(resposta)
+            }
+        }).catch(function (erro) {
+            console.log(erro)
+        })
+
+    }
+
+
+</script>

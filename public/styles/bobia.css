@@ -1,0 +1,54 @@
+.container {
+    width: 100vw;
+    display: flex;
+}
+
+.bobia {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* gap: 1rem; */
+}
+
+.paragrafos {
+    display: flex
+    ;
+        flex-direction: column;
+        align-items: center;
+}
+
+.bobia .titulo {
+    text-align: center;
+    width: 50%;
+    padding: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.bobia textarea {
+    width: 50%;
+    height: 20%;
+    resize: none;
+}
+
+
+button {
+    background-color: #ED145B;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#loading {
+
+}
+
+#loading img {
+    width: 150px;
+    height: auto; 
+}

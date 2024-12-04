@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alertas</title>
+  <link rel="stylesheet" href="../styles/barraLateral.css">
+  <link rel="stylesheet" href="../styles/alertas.css">
+  <!-- Import de fontes -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="../script/sessao.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+    <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container-dash">
+    <div id="barralateral" class="barra-lateral">
+    </div>
+    <div class="alertas">
+      <h1>Alertas</h1>
+      <p>Aqui são listados todos os alertas capturados pelos Esteiras</p>
+      <div class="filtros">
+        <div class="ver-vistos">
+          <p>Ver não vistos</p>
+          <input type="checkbox" id="chk_vistos">
+        </div>
+        <div id="container-dtInicio">
+          <label for="container-dtInicio">Data de Início</label>
+          <input type="date" id="data1">
+        </div>
+        <div id="container-dtFinal">
+          <label for="container-dtFinal">Data final</label>
+          <input type="date" id="data2">
+        </div>
+        <button id="botao-filtro" onclick="aplicarFiltros()">Aplicar Filtros</button>
+      </div>
+      <div class="table-container">
+        <table id="tabela">
+          <thead>
+            <tr>
+              <th>Esteira</th>
+              <th>Altura detectada</th>
+              <th>Data</th>
+              <th>Visto</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+
+<script>
+  var dataInicial = data1.value;
+  var dataFinal = data2.value;
+  function aplicarFiltros() {
+    dataInicial = data1.value;
+    dataFinal = data2.value;
+    // Sem filtro de data e sem assinalar checkbox
+    if (!chk_vistos.checked && (dataInicial == ""|| dataFinal == "")) {
+      listarAlertas()
+      // Com filtro de data e sem assinalar checkbox
+    } else if (!chk_vistos.checked && (dataInicial != ""&& dataFinal != "")){ 
+     listarPorData()
+      // Sem filtro de data e assinalando não vistos
+    } else if (chk_vistos.checked && (dataInicial == ""|| dataFinal == "")) {
+      listarNaoVistos()
+
+      // Com filtro de data e assinalando não vistos
+    } else {
+      listarAlertasNaoVistosPorData()
+    }
+    
+    }
+
+    function listarPorData() {
+      fetch(`/alertas/listarPorData/${sessionStorage.idEmpresa}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dataInicial: dataInicial,
+        dataFinal: dataFinal
+      })
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro ao buscar os alertas.');
+        }
+      })
+      .then((alertas) => {
+        let conteudo_tabela = "";
+
+        if (alertas.length === 0) {
+          conteudo_tabela = `
+            <tr>
+                <td colspan="4">Nenhum alerta encontrado.</td>
+            </tr>`;
+        } else {
+          for (let contador = 0; contador < alertas.length; contador++) {
+            const { nomeEsteira ,Esteira, distancia, Data, Visto, idAlerta, fkRegistro } = alertas[contador];
+            const data = new Date(Data);
+            const dataFormatada = data.toLocaleString('pt-BR');
+            const checkboxVisto = Visto === "Sim" ? "checked" : "";
+
+            conteudo_tabela += `
+            <tr>
+                <td>${nomeEsteira}</td>
+                <td>${distancia} cm</td>
+                <td>${dataFormatada}</td>
+                <td><input type="checkbox" id="checkbox-${idAlerta}" ${checkboxVisto} onchange="atualizarVisto(${idAlerta}, ${fkRegistro})" data-fkRegistro="${fkRegistro}"></td>
+            </tr>`;
+          }
+        }
+
+        const tabelaRegistros = document.querySelector("#tabela tbody");
+        tabelaRegistros.innerHTML = conteudo_tabela;
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar alertas:', erro);
+        alert('Erro ao listar alertas.');
+      });
+    }
+
+    function listarNaoVistos() {
+      fetch(`/alertas/listarNaoVistos/${sessionStorage.idEmpresa}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro ao buscar os alertas.');
+        }
+      })
+      .then((alertas) => {
+        let conteudo_tabela = "";
+
+        if (alertas.length === 0) {
+          conteudo_tabela = `
+            <tr>
+                <td colspan="4">Nenhum alerta encontrado.</td>
+            </tr>`;
+        } else {
+          for (let contador = 0; contador < alertas.length; contador++) {
+            const { nomeEsteira ,Esteira, distancia, Data, Visto, idAlerta, fkRegistro } = alertas[contador];
+            const data = new Date(Data);
+            const dataFormatada = data.toLocaleString('pt-BR');
+            const checkboxVisto = Visto === "Sim" ? "checked" : "";
+
+            conteudo_tabela += `
+            <tr>
+                <td>${nomeEsteira}</td>
+                <td>${distancia} cm</td>
+                <td>${dataFormatada}</td>
+                <td><input type="checkbox" id="checkbox-${idAlerta}" ${checkboxVisto} onchange="atualizarVisto(${idAlerta}, ${fkRegistro})" data-fkRegistro="${fkRegistro}"></td>
+            </tr>`;
+          }
+        }
+
+        const tabelaRegistros = document.querySelector("#tabela tbody");
+        tabelaRegistros.innerHTML = conteudo_tabela;
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar alertas:', erro);
+        alert('Erro ao listar alertas.');
+      });
+    }
+  
+  function listarAlertas() {
+    fetch(`/alertas/listar/${sessionStorage.idEmpresa}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro ao buscar os alertas.');
+        }
+      })
+      .then((alertas) => {
+        let conteudo_tabela = "";
+
+        if (alertas.length === 0) {
+          conteudo_tabela = `
+            <tr>
+                <td colspan="4">Nenhum alerta encontrado.</td>
+            </tr>`;
+        } else {
+          for (let contador = 0; contador < alertas.length; contador++) {
+            const { nomeEsteira, Esteira, distancia, Data, Visto, idAlerta, fkRegistro } = alertas[contador];
+            const data = new Date(Data);
+            const dataFormatada = data.toLocaleString('pt-BR');
+            const checkboxVisto = Visto === "Sim" ? "checked" : "";
+
+            conteudo_tabela += `
+            <tr>
+                <td>${nomeEsteira}</td>
+                <td>${distancia} cm</td>
+                <td>${dataFormatada}</td>
+                <td><input type="checkbox" id="checkbox-${idAlerta}" ${checkboxVisto} onchange="atualizarVisto(${idAlerta}, ${fkRegistro})" data-fkRegistro="${fkRegistro}"></td>
+            </tr>`;
+          }
+        }
+
+        const tabelaRegistros = document.querySelector("#tabela tbody");
+        tabelaRegistros.innerHTML = conteudo_tabela;
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar alertas:', erro);
+        alert('Erro ao listar alertas.');
+      });
+  }
+
+  function listarAlertasNaoVistosPorData() {
+
+    fetch(`/alertas/listarNaoVistoPorData/${sessionStorage.idEmpresa}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dataInicial: dataInicial,
+        dataFinal: dataFinal
+      })
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Erro ao buscar os alertas.');
+        }
+      })
+      .then((alertas) => {
+        let conteudo_tabela = "";
+
+        if (alertas.length === 0) {
+          conteudo_tabela = `
+            <tr>
+                <td colspan="4">Nenhum alerta encontrado.</td>
+            </tr>`;
+        } else {
+          for (let contador = 0; contador < alertas.length; contador++) {
+            const { Esteira, distancia, Data, Visto, idAlerta, fkRegistro } = alertas[contador];
+            const data = new Date(Data);
+            const dataFormatada = data.toLocaleString('pt-BR');
+            const checkboxVisto = Visto === "Sim" ? "checked" : "";
+
+            conteudo_tabela += `
+            <tr>
+                <td>${Esteira}</td>
+                <td>${distancia} cm</td>
+                <td>${dataFormatada}</td>
+                <td><input type="checkbox" id="checkbox-${idAlerta}" ${checkboxVisto} onchange="atualizarVisto(${idAlerta}, ${fkRegistro})" data-fkRegistro="${fkRegistro}"></td>
+            </tr>`;
+          }
+        }
+
+        const tabelaRegistros = document.querySelector("#tabela tbody");
+        tabelaRegistros.innerHTML = conteudo_tabela;
+      })
+      .catch((erro) => {
+        console.error('Erro ao listar alertas:', erro);
+        alert('Erro ao listar alertas.');
+      });
+  }
+  function atualizarVisto(idAlerta, fkRegistro) {
+
+    const visto = document.querySelector(`#checkbox-${idAlerta}`).checked ? 1 : 0;
+    console.log(`Atualizando alerta ${idAlerta}: Visto = ${visto}, fkRegistro = ${fkRegistro}`);
+    
+    const body = {
+      idAlerta: idAlerta,
+      visto: visto, 
+      fkRegistro: fkRegistro,
+    };
+
+    console.log("Enviando body para atualização:", body);
+
+    fetch('/alertas/atualizar', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log(`Alerta ${idAlerta} atualizado com sucesso para visto: ${visto}`);
+          listarAlertas(); 
+        } else {
+          throw new Error('Erro ao atualizar o status do alerta.');
+        }
+      })
+      .catch((erro) => {
+        console.error('Erro ao atualizar o status do alerta:', erro);
+        alert('Erro ao atualizar o status do alerta.');
+      });
+  }
+  document.addEventListener("DOMContentLoaded", listarAlertas);
+</script>

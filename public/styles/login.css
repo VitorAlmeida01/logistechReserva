@@ -1,0 +1,117 @@
+body {
+    overflow-x: hidden;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+#modalLogin{
+    position: fixed;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../img/bannerImg.png);
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.inputsLogin {
+    background-color: transparent;
+    border-style: solid;
+    width:16vw;
+    font-size: 0.9vw;
+    margin-bottom: 8vh;
+    border-width: 0 0 0.2vh 0;
+    z-index: 2;
+}
+
+textarea:focus, input:focus, select:focus {
+    box-shadow: 0 0 0 0;
+    border-bottom-width: 0.2vh;
+    outline: 0;
+}
+.bloco_login{
+    display: flex;
+    width: 44vw;
+    height: fit-content;
+    justify-content: flex-end;
+    border-radius: 0.5vw;
+    background-color: #070E3C;
+}
+.labelsLogin {
+    position: relative;
+    transition: .5s;
+    user-select: none;
+    z-index: 1;
+    font-size: 0.9vw;
+    bottom: 13vh;
+}
+.fa-user, .fa-lock {
+    position: relative;
+    transition: .5s;
+    user-select: none;
+    z-index: 1;
+    font-size: 0.8vw;
+    bottom: 12.5vh;
+    left: 15vw;
+}
+.mainText {
+    color: #fff;
+    margin-left: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 20px;
+    height: 85vh;
+}
+.form_login{
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    flex-direction: column;
+    background-color: #d9d9d9;
+    padding: 6vh 0vw 2vh;
+    border-top-right-radius: 0.5vw;
+    border-bottom-right-radius: 0.5vw;
+    width: fit-content; 
+}
+.form_login h1{
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-bottom: 10vh;
+    font-size: 1.8vw;
+    text-align: center;
+}
+.loginContainer{
+    display: flex;
+    flex-direction: column;
+}
+.div_inputs_login{
+    display: flex;
+    flex-direction: column;
+    padding: 0vh 3vw;
+}
+.area_botao_login {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75vw;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8vh;
+}
+.botao_login {
+    background-color: #070E3C;
+    color: #fff;
+    font-size: 0.9vw;
+    font-weight: 800;
+    padding: 1vh 0.8vw;
+    border: none;
+    border-radius: 0.5vw;
+    cursor: pointer;
+}

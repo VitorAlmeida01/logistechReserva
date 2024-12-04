@@ -1,0 +1,386 @@
+body {
+    min-width: 100vw;
+    min-height: 100vh;
+}
+
+.container-main{
+    display: flex;
+}
+
+.mainContent {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    width: 85vw;
+    margin: 0 10px 0 10px;
+
+}
+
+.container-title p{
+    font-size: 50px;
+    margin: 0 0 20px 0;
+}
+
+.container-title{
+    width: 85vw;
+    text-align: center;
+}
+
+.container-text{
+    color: #2e2e2eab;
+}
+
+.btn-cadastro{
+    background-color: #1E2868;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 15px;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
+}
+
+.btn-cadastro:hover{
+    cursor: pointer;
+    background-color: #0f26b9;
+}
+
+#modal-1{
+    display: fixed;
+    align-self: center;
+
+}
+
+.headerModal{
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.headerModal h1{
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+}
+
+.headerModal button{
+    background-color: #0f26b9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 0 50px 0;
+}
+
+.headerModal button:hover{
+    background-color: #0f26b9;
+    cursor: pointer;
+}
+
+.mainModal{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+}
+
+.mainModal input{
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: #D9D9D9;
+    width: 100%;
+}
+
+.mainModal input:focus{
+    outline: none;
+}
+
+.mainModal label{
+    align-self: flex-start;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+
+
+.mainModal button{
+    padding: 10px 20px;
+    background-color: #0f26b9;
+    color: #fff;
+    border-radius: 20px;
+    margin-top: 2%;
+    border: none;
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.75);
+}
+
+.mainModal button:hover{
+    cursor: pointer;
+    background-color: #1E2868;
+    transition: 0.2s;
+
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(0px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-200px);
+    }
+}
+
+.containerEsteiras{
+    width: 85vw;
+    height: 70vh;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border: 2px solid black;
+    border-radius: 10px;
+    overflow-y: auto;
+    scrollbar-color: #1E2868 transparent;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);
+
+}
+
+.containerEsteiras h6{
+    font-size: 30px;
+}
+
+.containerFiltro{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 20px;
+
+}
+
+.containerFiltro input{
+    border-radius: 5px;
+}
+
+.containerFiltro i:hover{
+    cursor: pointer;
+}
+
+ul{
+    list-style: none;
+}
+
+.filtrosEsteira{
+    margin-right: 20px;
+    font-size: 20px;
+}
+
+dialog {
+    padding: 20px;
+    transition: 0.2s;
+    opacity: 0;
+    transform: translateY(-100px);
+    border: none;
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    margin-left:  45% ;
+    margin-top: 15%;
+    min-width: 22%;
+}
+
+@media (max-width: 756px){
+    dialog{
+        margin: 40% 40% ;
+        border: 1px solid black;
+    }
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #2c2c2cc0;
+    width: 95%;
+}
+
+dialog.show {
+    animation: fadeIn 0.5s both; 
+}
+
+dialog::backdrop {
+    background-color: rgb(0, 0, 0, 0.3);
+}
+
+.cardEsteira{
+    background-color: #D9D9D9;
+    border: 1px solid black;
+    min-width: 40%;
+    width: 40%;
+    min-height: 30%;
+    margin: 30px;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    box-shadow: 2px 2px 2px 0px rgba(0,0,0,0.75);
+}
+
+.hidden{
+    transition: 0.2s;
+}
+
+@keyframes hoverAnimation {
+    from {
+        opacity: 1;
+        transform: translateY(0px);
+        transform: translateX(0px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-20px);
+        transform: translateX(10px);
+
+    }
+}
+
+@keyframes addAnimation{
+    from{
+        opacity: 1;
+        transform: translateY(-20px);
+        transform: translateX(10px);
+        transition: 0.2s;
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+        transform: translateX(0);
+        transition: 0.2s;
+    }
+}
+
+.cardEsteira.hidden{
+    transform: translateY(0px);
+
+}
+
+.cardEsteira.show{
+    animation: addAnimation 0.5s forwards; 
+
+}
+
+.cardEsteira:hover{
+    animation: hoverAnimation 0.5s forwards; 
+    cursor: pointer;
+}
+
+.cardEsteira p:nth-of-type(odd){
+    font-weight: 600;
+}
+
+.cardEsteira h6{
+    margin: 0;
+}
+
+.cardEsteira p{
+    font-size: 20px;
+
+}
+
+.esteiraNome{
+    color: blue;
+}
+
+.titulo {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.titulo .icons {
+    font-size: 2rem;
+}
+
+.icons i:hover {
+    cursor: pointer;
+    transform: translateY(-10%);
+}
+
+#slt_esteiras {
+    padding: 5px;
+    background-color: #384CD1;
+    font-size: 14px;
+    border: none;
+    color: #fff;
+    border-radius: 10px ;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.75);}
+
+.leftContainer{
+    width: 100%;
+}
+
+.verticalLine{
+    width: 1px;
+    border: 0.5px solid rgba(0, 0, 0, 0.377);
+}
+
+.rightContainer{
+    width: 50%;
+    padding-left: 10px;
+}
+
+.container-aviso{
+    width: fit-content;
+    height: fit-content;
+    margin: 0;
+    text-align: start;
+}
+
+@media (min-height: 550px) and (max-height: 960px){
+    .containerEsteiras{
+        margin-bottom: 20px;
+    }
+
+    .cardEsteira{
+        width: 45%;
+        min-height: 25%;
+        margin: 20px;
+        height: fit-content;
+    }
+
+    .cardEsteira p{
+        font-size: 15px;
+        margin: 5px;
+    }
+}
+
+#tabelaMetricas {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .tableIcons{
+    text-align: center;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  .tableIcons i:hover{
+    transition: 0.2s;
+    color: #0f26b9;
+  }

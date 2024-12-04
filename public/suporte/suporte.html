@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suporte</title>
+    <link rel="stylesheet" href="../styles/barraLateral.css" />
+    <link rel="stylesheet" href="../styles/suporte.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="container">
+         <div id="barralateral" class="barra-lateral">
+            <div class="div-imagem-perfil">
+                <img src="../img/perfilexemplo.png" class="perfil-foto" alt="foto de perfil" />
+            </div>
+            <h4 id="nomeFuncionario"></h4>
+            <div class="option selected">
+                <i class="fa-solid fa-building"></i>
+                <span><a href="./suporte.html">Aprovação de empresas</a></span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-robot"></i>
+                <span><a href="./bobia.html">Bob IA</a></span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-ticket"></i>
+                <span><a target="_blank" href="https://desk.zoho.com/agent/logistech/logistech/tickets">Ferramenta de suporte</a></span>
+            </div>
+            <div class="option">
+                <i class="fa-solid fa-door-open"></i>
+                <span><a onclick="deslogar()">Sair</a></span>
+            </div>
+        </div>
+        <div class="suporte">
+            <p>Aprovação de empresas</p>
+            <div class="containerEmpresas">
+
+                <table id="tabelaEmpresas">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CNPJ</th>
+                            <th>Data da solicitação</th>
+                            <th class='tableIcons'>Aprovar</th>
+                            <th class='tableIcons'>Reprovar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTabela">
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script>
+    listarEmpresasInativas();
+    carregarNomeUsuario();
+    function listarEmpresasInativas() {
+        fetch("/empresas/listarInativas", {
+            method: "GET"
+        })
+            .then(resposta => {
+                resposta.json()
+                    .then(resultado => {
+                        for (var i = 0; i < resultado.length; i++) {
+                            bodyTabela.innerHTML += `
+        <tr>
+        <td>${resultado[i].nomeFantasia}</td>
+        <td>${resultado[i].cnpj}</td>
+        <td>${(resultado[i].dataCadastro).substr(0, 10)}</td>
+        <td class='tableIcons'><i onclick="aprovarEmpresa(${resultado[i].idEmpresa})" class="fa-solid fa-check"></i></td>
+        <td class='tableIcons'><i onclick="reprovarEmpresa(${resultado[i].idEmpresa})" class="fa-solid fa-xmark"></i></td>
+        </tr>
+        `
+                        }
+                    })
+                    .catch(erro => {
+                        console.log("Erro ao converter o JSON: ", erro)
+                    })
+            })
+            .catch(erro => {
+                console.log("Erro na requisição: ", erro)
+            })
+    }
+
+    function aprovarEmpresa(idEmpresa) {
+        fetch(`/empresas/aprovar/${idEmpresa}`, {
+            method: "PATCH"
+        })
+        .then(resposta => {
+            if (resposta.ok) {
+                alert("Empresa aprovada com sucesso.");
+                window.location.reload();
+            }
+        })
+        .catch(erro => {
+                console.log("Erro na requisição: ", erro)
+            })
+    }
+
+    function reprovarEmpresa(idEmpresa) {
+        if (!confirm("Tem certeza de que deseja reprovar esta empresa?")) {
+        return;
+    }
+        fetch(`/empresas/reprovar/${idEmpresa}`, {
+            method: "DELETE"
+        })
+        .then(resposta => {
+            if (resposta.ok) {
+                alert("Empresa reprovada com sucesso.");
+                window.location.reload();
+            }
+        })
+        .catch(erro => {
+                console.log("Erro na requisição: ", erro)
+            })
+    }
+
+    
+  function carregarNomeUsuario() {
+    var idUsuario = sessionStorage.getItem("idUsuario");
+    fetch(`/usuarios/listarPorId/${idUsuario}`, {
+      method: "GET",
+    })
+      .then((resposta) => {
+        resposta
+          .json()
+          .then((resultado) => {
+            nomeFuncionario.innerHTML = resultado[0].nome;
+          })
+          .catch((erro) => {
+            console.log(erro);
+          });
+      })
+      .catch((erro) => {
+        console.log(erro);
+      });
+  }
+  if (!sessionStorage.getItem("idUsuario")) {
+    window.location.href = "/login.html"
+}
+
+
+  function deslogar() {
+    sessionStorage.clear();
+    window.location.reload()
+}
+</script>

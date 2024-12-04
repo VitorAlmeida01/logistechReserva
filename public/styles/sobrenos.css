@@ -1,0 +1,320 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    transition: 0.2s;
+}
+ 
+body {
+    overflow-x: hidden;
+}
+
+:root {
+    --bannerSize: calc(100vh - 100px);
+}
+
+
+/* Gabriel */
+.container-solucao {
+    height: 80vh;
+    text-align: center;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
+}
+
+.texto-solucao h1 {
+    font-size: 5ch;
+    font-weight: 2000;
+}
+
+.texto-solucao p {
+    color: rgb(73, 73, 73);
+    font-size: 3ch;
+}
+
+/*Vinicius dantas */
+
+.wallpaper {
+    width: 100vw;
+    height: 50vh;
+    background-image: url('../img/bannerImg.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.wallpaper h1 {
+    font-size: 3rem;
+    color: white;
+
+}
+
+.wallpaper p {
+    color: white;
+    font-weight: bold;
+}
+
+.wallpaper a {
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+}
+
+.funcao {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10vh;
+    align-items: center;
+    justify-content: center;
+    font-size: 5vh;
+    font-weight: bold;
+    gap: 2rem;
+}
+
+.meta {
+    font-size: 24px;
+    font-weight: 0;
+    text-align: center;
+    margin: 0vh 30vh;
+}
+
+.conteiner {
+    display: flex;
+    width: 100vw;
+    font-size: 20px;
+    height: 75vh;
+    max-width: 100vw;
+    align-items: center;
+}
+.solucao{
+    font-size: 3vh;
+}
+
+.conteiner .circle {
+    width: 50vh;
+    height: 50vh;
+}
+
+.conteiner .solucao {
+    align-self: center;
+    padding: 2vh;
+    width: 50vw;
+    color: #747474;
+    text-justify: distribute;
+}
+
+.espscamento {
+    width: 100vw;
+    height: 5vh;
+    background-color: #0E3AC0;
+    max-width: 100%;
+}
+
+.circle {
+    background-image: url('../img/LogisTech.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 300px;
+    border-radius: 50%;
+    padding: 20px;
+    background-color: #0B144A;
+    height: 20vh;
+    width: 20vh;
+    margin: 40px;
+    box-shadow: 10px 10px 0px 5px #0E3AC0;
+}
+
+/* vinicius oliveira*/
+.separacao {
+    width: 100vw;
+    height: 5vh;
+    background-color: #0E3AC0;
+    max-width: 100%;
+}
+
+.alicerces1 {
+    width: 100vw;
+    height: 95vh;
+}
+
+.alicerces1 .tituloAlicerces {
+    font-size: 8vh;
+    margin-top: 3rem;
+    font-weight: 800;
+    width: 100%;
+    text-align: center;
+}
+
+.alicerces1 .subtituloAlicerces {
+    width: 100%;
+    font-size: 4vh;
+    text-align: center;
+}
+
+.alicerces1 .cards {
+    display: flex;
+    padding: 8vh;
+    gap: 5rem;
+    height: 80%;
+
+}
+
+.alicerces1 .cardMissao {
+    width: 33%;
+    background-color: #996c76;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 15%;
+    padding: 0rem 2rem 2rem 2rem;
+    transition: 2s;
+    box-shadow: 1vh 1vh 1vh #343656e2;
+    transition: 0.5s all;
+}
+.alicerces1 .cardVisao {
+    width: 33%;
+    background-color: #6e967c;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 15%;
+    padding: 0rem 2rem 2rem 2rem;
+    transition: 2s;
+    box-shadow: 1vh 1vh 1vh #343656e2;
+    transition: 0.5s all;
+}
+.alicerces1 .cardValores {
+    width: 33%;
+    background-color: #67608c;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-radius: 15%;
+    padding: 0rem 2rem 2rem 2rem;
+    transition: 2s;
+    box-shadow: 1vh 1vh 1vh #343656e2;
+    transition: 0.5s all;
+}
+.alicerces1 .card:hover {
+    transform: translateY(-10%);
+    -webkit-box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+    -moz-box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+    box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+}
+
+.alicerces .card p {
+    font-size: 1.1rem;
+    padding: 0rem 2rem 2rem 2rem;
+}
+
+
+
+.cards .card h1 {
+    color: #fff;
+    font-size: 3rem;
+    font-weight: 900;
+}
+.cards .card p {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.time {
+    width: auto;
+    height: 150vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.time .titulo {
+    height: fit-content;
+    padding: 3rem 3rem 0rem 3rem;
+    text-align: center;
+    
+}
+
+.titulo h1 {
+    font-size: 3rem;
+}
+
+.titulo p {
+    font-size: 1.5rem;
+}
+
+.time .fotos {
+    
+    display: flex;
+    justify-content: center;
+
+    flex-wrap: wrap;
+}
+
+.fotos .colaborador {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-basis: 25%;
+    background-color: #f5dbdb;
+    margin: 0rem 2rem 4rem 2rem;
+    border-radius: 4vh;
+    padding: 2vh 4vh 4vh 4vh;
+    transition: 1s;
+    box-shadow: 1vh 1vh 1vh #343656e2;
+}
+.fotos .colaborador:hover {
+    transform: translateY(-10%);
+    -webkit-box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+    -moz-box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+    box-shadow: 9px 9px 5px 0px rgba(7, 14, 60, 1);
+}
+.fotos .colaborador h1, .fotos .colaborador p{
+    color: #765348;
+    margin-top: 1vh;
+}
+.fotos .colaborador p{
+    border-top: 0.25vh solid #765348;
+    width: 32vh;
+    padding-top: 1vh;
+    color: #765348;
+    margin-top: 2vh;
+}
+.fotos .colaborador h1{
+    margin-top: 3vh;
+}
+
+.colaborador img {
+    border-radius: 50%;
+    align-self: center;
+    width: 35vh;
+    height: 35vh;
+    box-shadow: 1vh 1vh 1vh #343656e2;
+}
+
+.time .titulo h1 {
+    text-align: center;
+}
+.time .titulo p {
+    margin-bottom: 3vh;
+}
+
+footer {
+    background-color: #070E3C;
+    color: white;
+    text-align: center;
+    padding: 40px;
+    width: 100%;
+    font-size: 2ch;
+}

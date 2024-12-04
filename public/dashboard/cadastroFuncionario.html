@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logistech</title>
+  <link rel="stylesheet" href="../styles/barraLateral.css" />
+  <link rel="stylesheet" href="../styles/cadastrofuncionarios.css" />
+  <script src="../script/sessao.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+  <script src="../script/cadastroFuncionario.js" defer></script>
+</head>
+
+<body>
+  <div class="area_bg_modal" id="area_modal">
+    <div id="modal_1">
+      <div class="container-esteira">
+        <div class="headerModal">
+          <h1>Adicionar funcionário</h1>
+          <button id="closeButton" class="close-modal" onclick="fecharCadastro()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="mainModal">
+          <label for="inpNome">Nome</label>
+          <input type="text" id="inpNome" />
+
+          <label for="inpDep">E-mail</label>
+          <input type="text" id="inpEmail" />
+
+          <label for="inpTamanho">Senha</label>
+          <input type="password" id="inpSenha" />
+          <div id="container-aviso"></div>
+          <button id="cadastroBtn" onclick="cadastrar()">Cadastrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="area_bg_modal2" id="area_modal2">
+    <div id="modal_2">
+      <div class="container-esteira">
+        <div class="headerModal">
+          <h1>Editar funcionário</h1>
+          <button id="closeButton" class="close-modal" onclick="fecharEdicao()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="mainModal">
+          <label for="inpNome">Nome</label>
+          <input type="text" id="inpNomeAtt" />
+
+          <label for="inpDep">E-mail</label>
+          <input type="text" id="inpEmailAtt" />
+
+          <label for="inpTamanho">Senha</label>
+          <input type="password" id="inpSenhaAtt" />
+          <div id="container-aviso2"></div>
+          <button id="salvarFunc">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <main class="container-main">
+    <div id="barralateral" class="barra-lateral">
+
+    </div>
+
+    <div class="mainContent">
+      <div class="container-title">
+        <p>Funcionários</p>
+      </div>
+      <hr />
+      <div class="container-text">
+        <p>
+          Neste seção você pode criar e visualizar todas os funcionário
+          cadastrados e seus respectivos dados
+        </p>
+      </div>
+      <div class="containerFiltro">
+        <div class="container-btnCadastro">
+          <button id="btnCadastro" class="btn-cadastro">
+            <i class="fa-solid fa-circle-plus"></i> Cadastrar funcionário
+          </button>
+        </div>
+        <div class="filtrosEsteira">
+          <ul>
+            <li>
+              Pesquisar por email <input type="text" id="inpPesquisa" />
+              <i class="fa-solid fa-magnifying-glass" onclick="pesquisarUsuario()"></i>
+            </li>
+            <li class="containerBtnLimpar">
+              <button class="btn-limparPesquisa" onclick="limparPesquisa()">Limpar pesquisa</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <h2>Funcionários cadastrados</h2>
+      <div id="div_containerEsteiras" class="containerEsteiras">
+
+        <table id="tabelaFuncionarios">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Data de cadastro</th>
+              <th class='tableIcons'>Editar</th>
+              <th class='tableIcons'>Excluir</th>
+            </tr>
+          </thead>
+          <tbody id="bodyTabela">
+
+          </tbody>
+        </table>
+
+
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>
+<script>
+  // Carregar todos os usuários daquela empresa quando a página carrega
+  carregarNomeEmpresa()
+  var idEmpresa = sessionStorage.getItem("idEmpresa")
+  fetch(`/usuarios/listarPorEmpresa/${idEmpresa}`, {
+    method: "GET",
+  })
+    .then((resposta) => {
+      console.log(resposta)
+      resposta
+        .json()
+        .then((resultado) => {
+          for (var i = 0; i < resultado.length; i++) {
+
+            bodyTabela.innerHTML += `
+        <tr>
+        <td>${resultado[i].nome}</td>
+        <td>${resultado[i].email}</td>
+        <td>${(resultado[i].dataCadastro).substr(0, 10)}</td>
+        <td class='tableIcons'> <i class="fa-solid fa-pencil" onclick="editarFuncionario(${resultado[i].idUsuario}, '${resultado[i].nome}', '${resultado[i].email}', '${resultado[i].senha}')" ></i></td>
+        <td class='tableIcons deletarUser'><i class="fa-solid fa-trash"  onclick='deletar(${resultado[i].idUsuario})'></i></td>
+        </tr>
+        `
+            if (resultado[i].idUsuario == sessionStorage.idUsuario) {
+              var deletarUserElements = document.querySelectorAll('.deletarUser')
+              deletarUserElements[i].innerHTML = ''
+            }
+          }
+        })
+        .catch((erro) => {
+          console.log(erro)
+        })
+    })
+    .catch((erro) => {
+      console.log(erro)
+    })
+
+  function carregarNomeEmpresa() {
+    var idEmpresa = sessionStorage.getItem("idEmpresa")
+    fetch(`/empresas/listar/${idEmpresa}`, {
+      method: "GET",
+    })
+      .then((resposta) => {
+        resposta
+          .json()
+          .then((resultado) => {
+            nomeEmpresa.innerHTML = resultado[0].nomeFantasia
+          })
+          .catch((erro) => {
+            console.log(erro)
+          })
+      })
+      .catch((erro) => {
+        console.log(erro)
+      })
+  }
+
+
+  function cadastrar() {
+    let divMensagem = document.getElementById('container-aviso')
+
+    if (inpNome.value == '' || inpEmail.value == '' || inpSenha == '') {
+      // alert('Preencha todos os campos')
+      divMensagem.style.color = 'red'
+      divMensagem.innerText = 'Preencha os campos'
+      return false
+    }
+
+    setTimeout(() => {
+      divMensagem.innerHTML = ''
+    }, 1000)
+
+    fetch(`/usuarios/cadastrar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nome: inpNome.value,
+        email: inpEmail.value,
+        senha: inpSenha.value,
+        fkEmpresa: idEmpresa
+      })
+    })
+      .then((resposta) => {
+        console.log(resposta)
+        if (resposta.status == 200) {
+          // alert("Usuário cadastrado com sucesso.")
+          divMensagem.style.color = 'blue'
+          divMensagem.innerText = 'Usuario cadastrado com sucesso'
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+        } else if (resposta.status == 400) {
+          resposta.text()
+            .then(texto => {
+              alert(texto)
+            })
+        }
+      })
+      .catch((erro) => {
+        console.error(erro)
+      })
+
+  }
+
+  function pesquisarUsuario() {
+    var idEmpresa = sessionStorage.idEmpresa
+    bodyTabela.innerHTML = ''
+    var emailPesquisa = document.getElementById('inpPesquisa').value
+
+    fetch(`/usuarios/pesquisarUsuario/${idEmpresa}/${emailPesquisa}`)
+      .then((resposta) => {
+        if (resposta.ok) {
+          resposta.json().then((resultado) => {
+            for (var i = 0; i < resultado.length; i++) {
+              bodyTabela.innerHTML += `
+                <tr>
+                <td>${resultado[i].nome}</td>
+                <td>${resultado[i].email}</td>
+                <td>${(resultado[i].dataCadastro).substr(0, 10)}</td>
+                <td class='tableIcons'> <i class="fa-solid fa-pencil" onclick="editarFuncionario(${resultado[i].idUsuario}, '${resultado[i].nome}', '${resultado[i].email}', '${resultado[i].senha}')" ></i></td>
+                <td class='tableIcons deletarUser'><i class="fa-solid fa-trash"  onclick='deletar(${resultado[i].idUsuario})'></i></td>
+                </tr>
+                `
+
+              if (resultado[i].idUsuario == sessionStorage.idUsuario) {
+                var deletarUserElements = document.querySelectorAll('.deletarUser')
+                deletarUserElements[i].innerHTML = ''
+              }
+            }
+          })
+        }
+      }).catch((erro => {
+        console.log("Erro ao enviar requisição: ", erro)
+      }))
+  }
+
+  function limparPesquisa() {
+    window.location.reload()
+  }
+
+  function editarFuncionario(idUsuario, nome, email, senha) {
+    inpNomeAtt.value = nome
+    inpEmailAtt.value = email
+    inpSenhaAtt.value = senha
+
+    abrirEdicao()
+
+    document.getElementById('salvarFunc').addEventListener('click', () => {
+      salvarFuncionario(idUsuario)
+    })
+  }
+
+  function salvarFuncionario(idUsuario) {
+    let divMensagem = document.getElementById('container-aviso2')
+    let attNome = inpNomeAtt.value
+    let attEmail = inpEmailAtt.value
+    let attSenha = inpSenhaAtt.value
+
+    if (attNome == '' || attEmail == '' || attEmail == '' || attSenha == '') {
+      divMensagem.style.color = 'red'
+      divMensagem.innerText = 'Preencha todos os campos'
+      return false
+    }
+
+    setTimeout(() => {
+      divMensagem.innerHTML = ''
+    }, 1000)
+
+
+    fetch(`/usuarios/editar/${idUsuario}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nome: attNome,
+        email: attEmail,
+        senha: attSenha
+      }),
+    }).then((resposta) => {
+      if (resposta.status === 200) {
+        divMensagem.style.color = 'blue'
+        divMensagem.innerText = 'Dados atualizados'
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      } else {
+        console.log(resposta)
+      }
+    }).catch(function (erro) {
+      console.log(erro)
+    })
+
+  }
+
+  function deletar(idUsuario) {
+    fetch(`/usuarios/deletar/${idUsuario}`, {
+      method: "DELETE",
+    }).then((resposta) => {
+      if (resposta.status == 200) {
+        alert('Usuario deletado com sucesso')
+        window.location.reload()
+      }
+    }).catch((erro) => {
+      console.log(erro)
+    })
+  }
+
+  document.getElementById('btnCadastro').addEventListener('click', () => {
+    abrirCadastro()
+  })
+
+  function abrirCadastro() {
+    area_modal.style.display = 'flex'
+    console.log(area_modal)
+  }
+
+  function fecharCadastro() {
+    let divMensagem = document.getElementById('container-aviso')
+
+    area_modal.style.display = 'none'
+    divMensagem.innerHTML = ''
+  }
+
+  function abrirEdicao() {
+    area_modal2.style.display = 'flex'
+    console.log(area_modal2)
+  }
+
+  function fecharEdicao() {
+    let divMensagem = document.getElementById('container-aviso')
+    let divMensagem2 = document.getElementById('container-aviso2')
+
+    area_modal2.style.display = 'none'
+    divMensagem.innerHTML = ''
+    divMensagem2.innerHTML = ''
+  }
+
+</script>

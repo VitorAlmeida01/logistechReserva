@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="./styles/head_footer.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="./styles/cadastro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+    <script src="script/cadastro.js"></script>
+</head>
+
+<body>
+    <div class="areaMensagens" id="modal_mensagem_erro">
+        <div class="modalErro" id="modal_erro">
+            <div class="infoErro">
+                <i class="fa-solid fa-circle-xmark iconErro"></i>
+                <span class="mensagemErro">As informações não foram preechidas corretamente. Corriga para
+                    prosseguir!</span>
+            </div>
+            <button type="button" class="botaoOK" onclick="removerMensagem()">ENTENDIDO</button>
+        </div>
+    </div>
+    <div class="areaMensagens" id="modal_mensagem_cadastrado">
+        <div class="modalCadastrado" id="modal_cadastrado">
+            <div class="infoCadastrado">
+                <img src="./img/Logo_Logistech2.png" alt="logo Logistech" class="logoCadastrado">
+                <span class="mensagemCadastrado" id="mensagem_cadastrado">Seu cadastro foi concluído com sucesso!
+                    <br>Seja Bem vindo(a) Nome Empresa!</span>
+            </div>
+            <button type="button" class="botaoConcluido" onclick="concluirCadastro()">ENTENDIDO</button>
+        </div>
+    </div>
+    <div class="area_form" id="modalCadastro">
+        <div class="bloco_form">
+            <div class="bloco_info_cadastro">
+                <img src="./img/Logo_Logistech2.png" alt="logo Logistech" class="imgLogo">
+                <p class="textoCadastro"><strong>Nossa solução</strong> trará <strong>controle</strong> a suas linhas de
+                    produção.</p>
+            </div>
+            <i class="fa-solid fa-house" id="iconCasa" onclick="window.location.href ='./index.html'"></i>
+            <form class="form_cadastro">
+                <h1>Cadastre-se</h1>
+                <div id="cadastroParte1">
+                    <div class="div_inputs">
+                        <input type="text" id="ipt_nome_empresa" oninput="validarNomeEmpresa()" class="inputs">
+                        <span class="labels">Razão Social</span>
+                        <span id="span_validar_nome_empresa" class="span_validacao"></span>
+                        <input type="number" id="ipt_cnpj" oninput="validarCNPJ()" class="inputs" required>
+                        <span class="labels">CNPJ da Empresa</span>
+                        <span id="span_validar_cnpj" class="span_validacao"></span>
+                        <input type="number" id="ipt_telefone_comercial" oninput="validarTelefone()" class="inputs">
+                        <span class="labels">Telefone Comercial</span>
+                        <span id="span_validar_telefone" class="span_validacao"></span>
+                        <input type="number" id="ipt_cep" oninput="validarCEP()" class="inputs">
+                        <span class="labels">CEP da Empresa</span>
+                        <span id="span_validar_cep" class="span_validacao"></span>
+                    </div>
+                    <div class="area_botao" id="areaBotao">
+                        <span class="avisoLogin">Já possui uma conta? <strong style="cursor: pointer;"
+                                onclick="redirecionarLogin()">Faça Login</strong></span>
+                        <button type="button" class="botao_cadastro" onclick="validarParte1()">Seguinte</button>
+                    </div>
+                </div>
+                <div id="cadastroParte2">
+                    <div class="div_inputs">
+                        <input type="text" id="ipt_logradouro" maxlength="100" oninput="validarLogradouro()"
+                            class="inputs">
+                        <span class="labels">Logradouro</span>
+                        <span id="span_validar_logradouro" class="span_validacao"></span>
+                        <div class="cidade_e_uf">
+                            <div class="ipt_e_label_cidade">
+                                <input type="text" id="ipt_cidade" oninput="validarCidade()" class="input_cidade">
+                                <span class="label_cidade">Cidade</span>
+                                <span id="span_validar_cidade" class="span_validacao"></span>
+                            </div>
+                            <div class="div_UF">
+
+                                <select class="selectUF" id="slt_uf" oninput="validarEstado()">
+                                    <option value="AC" selected>AC</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AP">AP</option>
+                                    <option value="AM">AM</option>
+                                    <option value="BA">BA</option>
+                                    <option value="CE">CE</option>
+                                    <option value="ES">ES</option>
+                                    <option value="GO">GO</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MT">MT</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MG">MG</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PB">PB</option>
+                                    <option value="PR">PR</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PI">PI</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="RN">RN</option>
+                                    <option value="RS">RS</option>
+                                    <option value="RO">RO</option>
+                                    <option value="RR">RR</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SP">SP</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TO">TO</option>
+                                    <option value="DF">DF</option>
+                                </select>
+                                <span class="label_estado">Estado</span>
+                            </div>
+                        </div>
+                        <input type="number" id="ipt_numero" oninput="validarNumero()" class="inputs">
+                        <span class="labels">Número</span>
+                        <span id="span_validar_numero" class="span_validacao"></span>
+                        <input type="text" id="ipt_complemento" oninput="validarComplemento()" class="inputs">
+                        <span class="labels">Complemento</span>
+                        <span id="span_validar_complemento" class="span_validacao"></span>
+                    </div>
+                    <div class="area_botao">
+                        <span class="avisoLogin">Já possui uma conta? <strong style="cursor: pointer;"
+                                onclick="redirecionarLogin()">Faça Login</strong></span>
+                        <div>
+                            <button type="button" class="botao_voltar" onclick="voltarToParte1()">Voltar</button>
+                            <button type="button" class="botao_cadastro" onclick="validarParte2()">Seguinte</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="cadastroParte3">
+                    <div class="div_inputs">
+                        <input type="text" id="ipt_nome_usuario" oninput="validarNomeUsuario()" class="inputs" required>
+                        <span class="labels ">Nome de Administrador</span>
+                        <span id="span_validar_nome_usuario" class="span_validacao"></span>
+                        <input type="text" id="ipt_email" maxlength="100" oninput="validarEmail()" class="inputs">
+                        <span class="labels">Email do Administrador</span>
+                        <span id="span_validar_email" class="span_validacao"></span>
+                        <input type="password" id="ipt_senha_usuario" oninput="validarSenha()" class="inputs">
+                        <span class="labels">Digite sua Senha</span>
+                        <span id="span_validar_senha" class="span_validacao"></span>
+                        <input type="password" id="ipt_confirme_senha" oninput="validarConfirmacao()" class="inputs">
+                        <span class="labels">Confirme a Senha</span>
+                        <span id="span_validar_confirmacao" class="span_validacao"></span>
+                    </div>
+                    <div class="area_botao">
+                        <span class="avisoLogin">Já possui uma conta? <strong style="cursor: pointer;"
+                                onclick="redirecionarLogin()">Faça Login</strong></span>
+                        <div>
+                            <button type="button" class="botao_voltar" onclick="voltarToParte2()">Voltar</button>
+                            <button type="button" class="botao_cadastro" onclick="validarParte3()">Cadastrar</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="area_form" id="modalLogin">
+        <div class="bloco_login">
+            <i class="fa-solid fa-house casaLogin" id="iconCasa" onclick="window.location.href ='./index.html'"></i>
+            <form class="form_login">
+                <h1>Login</h1>
+                <div class="loginContainer" id="loginSpace">
+                    <div class="div_inputs_login">
+                        <input type="text" id="ipt_login" class="inputsLogin">
+                        <span class="labelsLogin">Email</span>
+                        <i class="fa-solid fa-user"></i>
+                        <input type="password" id="ipt_senha_login" class="inputsLogin">
+                        <span class="labelsLogin">Senha</span>
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div class="area_botao_login" id="areaBotaoLogin">
+                        <span class="avisoLogin">Não possui uma conta? <strong style="cursor: pointer;"
+                                onclick="redirecionarCadastro()">Cadastre-se</strong></span>
+                        <button class="botao_login" type="button" onclick="login()">Acessar</button>
+                    </div>
+                </div>
+            </form>
+            <div class="bloco_info_cadastro">
+                <img src="./img/Logo_Logistech2.png" alt="logo Logistech" class="imgLogo">
+                <p class="textoCadastro"><strong>Seja bem vindo de volta!</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div id="home" class="bannerImg">
+    </main>
+
+</body>
+
+</html>
+<script>
+
+    function mudarTipoSenha() {
+        if (olhofechado.style.display == "none") {
+            // mostrar senha
+            ipt_senha.type = "text"
+            olhofechado.style.display = "block"
+            olhoaberto.style.display = "none"
+        } else {
+            ipt_senha.type = "password"
+            olhofechado.style.display = "none"
+            olhoaberto.style.display = "block"
+        }
+    }
+
+    function login() {
+        var login = ipt_login.value
+        var senha = ipt_senha_login.value
+
+        // validações
+        // Validação de autenticação (adicionar após a implementação da API de comunicação com BD)
+        fetch("/usuarios/autenticar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                login: login,
+                senha: senha
+            })
+        })
+
+            .then((resposta) => {
+                if (resposta.status == 200) {
+                    resposta.json()
+                        .then((resultado) => {
+                            sessionStorage.setItem("idUsuario", resultado[0].idUsuario)
+                            if (resultado[0].nivel == 2) {
+                                window.location.href = "./suporte/suporte.html"
+                            } else
+                            // caso a empresa esteja com o cadastro ativo, vamos redirecionar para a dashboard, caso não
+                            if (resultado[0].isAtivo == 1) {
+                                // armazenando os dados do usuário logado no SessionStorage
+                                sessionStorage.setItem("idEmpresa", resultado[0].fkEmpresa)
+                                // verificando nível de usuário e o direcionando para a tela certa
+                                window.location.href = "./dashboard/dashboard.html"
+                            } else {
+                                alert("Sua empresa não está com cadastro ativo ainda!")
+                            }
+                        })
+                        .catch((erro) => {
+                            // console.log(erro);
+                        })
+                } else if (resposta.status == 403) {
+                    // usuario ou senha incorretos
+                    modal_mensagem_erro.style.display = 'flex'
+                    modal_erro.style.display = 'flex'
+                } else {
+                    console.error("Erro inesperado ao logar", resposta)
+                }
+
+            })
+            .catch((erro) => {
+                console.log(erro)
+            })
+
+    }
+
+
+    /*
+    function autenticar(login, senha) {
+        if (login == "admin" && senha == "admin") {
+            return true
+        }
+        return false;
+    } */
+</script>

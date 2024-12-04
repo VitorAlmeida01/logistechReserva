@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../styles/barraLateral.css">
+  <link rel="stylesheet" href="../styles/atendimento.css">
+  <script src="../script/sessao.js"></script>
+  <title>Atendimento</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet" />
+    <link rel="shortcut icon" href="./img/LOGISTECH_SOLUTIONS_Logo.png" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container-dash">
+     <div id="barralateral" class="barra-lateral">
+      
+    </div>
+
+    <div class="atendimento">
+      <div class="infos">
+        <h1>Abertura de chamado</h1>
+        <p>Preencha as informações solicitadas sobre seu problema/solicitação</p>
+      </div>
+
+      <div id="zsfeedbackwidgetdiv"></div>
+      <p>Ainda com dúvidas? Baixe nosso <a href="../assets/manual.pdf" download>Manual de uso</a></p>
+
+      <!-- <div class="form">
+        <div class="campo">
+          <label for="ipt_assunto">Assunto</label>
+          <input type="text" id="ipt_assunto">
+        </div>
+
+        <div class="campo">
+          <label for="ipt_descricao">Descrição</label>
+          <textarea id="ipt_descricao" style="resize: none;"></textarea>
+        </div>
+
+        <div class="campo">
+          <label for="ipt_email">E-mail</label>
+          <input type="email" id="ipt_email">
+        </div>
+
+
+
+        <button onclick="enviarChamado()">Enviar chamado</button>
+      </div> -->
+    </div>
+  </div>
+</body>
+<script src="https://desk.zoho.com/portal/api/feedbackwidget/1065425000000291369?orgId=872701168&displayType=embeded"></script>
+
+</html>
+<script>
+  function enviarChamado() {
+    var assunto = ipt_assunto.value;
+    var descricao = ipt_descricao.value;
+    var email = ipt_email.value;
+
+    if (assunto == "" || descricao == "" || email == "") {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      alert("E-mail inválido!")
+    } else {
+      const ticketData = {
+      subject: assunto,
+      description: descricao,
+      email: email
+    };
+
+
+
+      fetch('https://desk.zoho.com/api/v1/tickets', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Zoho-oauthtoken <your_access_token>',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ticketData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.code === 3000) {
+            alert("Ticket criado com sucesso!");
+          } else {
+            alert("Erro ao criar o ticket: " + data.message);
+          }
+        })
+        .catch(error => console.error('Erro ao criar ticket:', error));
+    }
+  }
+</script>
